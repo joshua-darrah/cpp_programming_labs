@@ -36,9 +36,8 @@ public:
     }
 };
 
-// ================================
+
 // MAIN FUNCTION
-// ================================
 int main() {
     // Part 1a: Accept integer input and call the global function
     int n;
