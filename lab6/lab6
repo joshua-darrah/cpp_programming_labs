@@ -1,0 +1,106 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Creating the Student class with name and ID as private members
+class Student {
+private:
+    string name;
+    int id;
+
+public:
+    // Function to input student details
+    void setData() {
+        cout << "Enter student name: ";
+        getline(cin, name); // getting full name
+        cout << "Enter student ID: ";
+        cin >> id;
+        cin.ignore(); // clears input buffer for next getline
+    }
+
+    // Function to display student details
+    void displayData() {
+        cout << "Student Name: " << name << ", ID: " << id << endl;
+    }
+};
+
+// Functions for arithmetic operations
+int add(int a, int b) {
+    return a + b;
+}
+
+int subtract(int a, int b) {
+    return a - b;
+}
+
+int multiply(int a, int b) {
+    return a * b;
+}
+
+int divide(int a, int b) {
+    if (b == 0) {
+        cout << "Error: Division by zero is undefined!" << endl;
+        return 0; // return zero when division is invalid
+    }
+    return a / b;
+}
+
+int main() {
+    int num;
+
+    // Creating an array of pointers to Student objects dynamically
+    cout << "Enter number of students: ";
+    cin >> num;
+    cin.ignore(); // clear newline character before getline
+
+    Student* students[num]; // array of Student pointers
+
+    for (int i = 0; i < num; i++) {
+        students[i] = new Student(); // allocating memory with new
+        cout << "\nEnter details for student " << i + 1 << ":" << endl;
+        students[i]->setData(); // calling setData with arrow operator
+    }
+
+    // Displaying student details
+    cout << "\n--- Displaying Student Details ---\n";
+    for (int i = 0; i < num; i++) {
+        students[i]->displayData();
+    }
+
+    // Pointer to Functions
+    int (*operation)(int, int); // declaring function pointer
+    int choice, a, b;
+
+    do {
+        // Display menu
+        cout << "\nChoose an operation:\n";
+        cout << "1. Add\n2. Subtract\n3. Multiply\n4. Divide\n5. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice >= 1 && choice <= 4) {
+            cout << "Enter two integers: ";
+            cin >> a >> b;
+
+            // Assigning the correct function to the pointer
+            switch (choice) {
+                case 1: operation = &add; break;
+                case 2: operation = &subtract; break;
+                case 3: operation = &multiply; break;
+                case 4: operation = &divide; break;
+            }
+
+            // Calling the function using the pointer
+            int result = operation(a, b);
+            cout << "Result: " << result << endl;
+        }
+
+    } while (choice != 5);
+
+    // Free dynamically allocated memory
+    for (int i = 0; i < num; i++) {
+        delete students[i];
+    }
+
+    return 0;
+}
