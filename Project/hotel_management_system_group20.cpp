@@ -7,7 +7,7 @@
 #include <string>       // To handle strings
 using namespace std;    // Use standard namespace to avoid std:: prefix
 
-// Room class to represent each hotel room
+// Room class to represent each hotel room 
 class Room {
 public:
     int roomNumber;           // Room number
@@ -129,7 +129,7 @@ public:
     }
 };
 
-// Main function - entry point of the application
+// Main function
 int main() {
     Hotel hotel;                // Create Hotel object
     hotel.loadFromFile();       // Load existing data from file
@@ -178,6 +178,6 @@ int main() {
     } while (choice != 6);                     // Repeat until user exits
 
     hotel.saveToFile();                        // Save all room data to file
-    cout << "Hotel data saved. Goodbye!\n";    // Exit message
+    cout << "Hotel data saved. Goodbye!\n";    
     return 0;                                  // Exit program
 }
