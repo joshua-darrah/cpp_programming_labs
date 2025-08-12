@@ -5,9 +5,11 @@
 #include <fstream>      // For file handling
 #include <vector>       // To use the vector container
 #include <string>       // To handle strings
+#include <iomanip>
+#include <windows.h>     // For unix system control functionality such as console clear etc
 using namespace std;    // Use standard namespace to avoid std:: prefix
 
-// Room class to represent each hotel room 
+// Room class to represent each hotel room
 class Room {
 public:
     int roomNumber;           // Room number
@@ -75,8 +77,15 @@ public:
 
     // Add a new room to the hotel
     void addRoom(int roomNum) {
+        // Check for duplicate room number
+        for (const Room& room : rooms) {
+            if (room.roomNumber == roomNum) {
+                cout << "Room " << roomNum << " already exists. Cannot add duplicate.\n";
+                return;
+            }
+        }
         rooms.push_back(Room(roomNum));         // Create and add Room object
-        cout << "Room " << roomNum << " added.\n";
+        cout << "Adding room..." << endl;
     }
 
     // Remove a room from the hotel
@@ -111,6 +120,8 @@ public:
             }
         }
         cout << "Room not available for assignment.\n"; // If room is taken or not found
+        cout << "____________________________________" << endl;
+        cout << "" << endl;
     }
 
     // Search and display all available (unoccupied) rooms
@@ -121,63 +132,105 @@ public:
         for (const Room& room : rooms) {
             if (!room.isOccupied) {             // If room is free
                 cout << "Available: Room " << room.roomNumber << endl;
+                cout << "____________________________________" << endl;
+                cout << "" << endl;
                 found = true;
             }
         }
 
         if (!found) cout << "No available rooms.\n";  // If none found
+            cout << "____________________________________" << endl;
+            cout << "" << endl;
     }
 };
 
-// Main function
+//Delay function
+void delay(){
+    int time = 0;
+    while(time <= 69999000){
+        time ++;
+    }
+}
+
+//Hashing Algorithm
+// Main function - entry point of the application
 int main() {
     Hotel hotel;                // Create Hotel object
     hotel.loadFromFile();       // Load existing data from file
 
     int choice;                 // Menu choice input
+    int num;
 
     // Loop until user chooses to exit
     do {
         // Display menu options
-        cout << "\nHotel Management Menu\n";
+        cout << "" << endl;
+        cout <<setw(40) << "Hotel Management Menu\n";
+        cout << "" << endl;
         cout << "1. Search for available rooms\n";
         cout << "2. Add a new room\n";
         cout << "3. Remove a room\n";
         cout << "4. View all rooms\n";
         cout << "5. Assign room to occupant\n";
         cout << "6. Save and Exit\n";
+        cout <<"_________________" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
+        cout << "Loading..." << endl;
+        delay();
+        system("cls");
 
         // Handle user choices
-        if (choice == 1) {
-            hotel.searchAvailableRooms();     // Show available rooms
-        } else if (choice == 2) {
-            int num;
-            cout << "Enter new room number: ";
-            cin >> num;
-            hotel.addRoom(num);               // Add room
-        } else if (choice == 3) {
-            int num;
-            cout << "Enter room number to remove: ";
-            cin >> num;
-            hotel.removeRoom(num);            // Remove room
-        } else if (choice == 4) {
-            hotel.viewRooms();                // View all rooms
-        } else if (choice == 5) {
-            int num;
-            string name;
-            cout << "Enter room number: ";
-            cin >> num;
-            cout << "Enter occupant name: ";
-            cin.ignore();                     // Ignore leftover newline from cin
-            getline(cin, name);               // Read full name with spaces
-            hotel.assignOccupant(num, name);  // Assign occupant to room
+        switch (choice){
+            case 1:
+                 cout << setw(40) << "Available rooms"<< endl << endl;
+                 hotel.searchAvailableRooms();
+            break;
+            case 2:
+                 cout <<setw(40)<< "Rooms added so far\n\n";
+                 hotel.searchAvailableRooms();
+                 cout << endl;
+                 cout << "Enter new room number: ";
+                 cin >> num;
+                 hotel.addRoom(num);
+                 delay();
+                 delay();
+                 system("cls"); //This clears the console
+            break;
+            case 3:
+                 cout << setw(40)<< "Available rooms to remove\n\n";
+                 hotel.searchAvailableRooms();
+                 cout << endl;
+                 cout << "Enter room number to remove: ";
+                 cin >> num;
+                 hotel.removeRoom(num);           //Remove room
+                 delay();
+                 delay();
+                 system("cls");
+            break;
+            case 4:
+                 hotel.viewRooms(); //View all rooms
+            break;
+            case 5:
+                 cout << setw(40)<< "Available rooms left" << endl << endl;
+                 hotel.searchAvailableRooms();
+                 string name;
+                 cout << "Enter room number: ";
+                 cin >> num;
+                 cout << "Enter occupant name: ";
+                 cin.ignore();                  //Ignore leftover newline from cin
+                 getline(cin, name);            //Read full name with spaces
+                 hotel.assignOccupant(num, name);    //Assign occupant to room
+                 delay(); delay();
+            break;
+            defaul:
+                 cout << "Invalid input\n";
+            break;
         }
 
     } while (choice != 6);                     // Repeat until user exits
 
     hotel.saveToFile();                        // Save all room data to file
-    cout << "Hotel data saved. Goodbye!\n";    
+    cout << "Hotel data saved. Goodbye!\n";    // Exit message
     return 0;                                  // Exit program
 }
